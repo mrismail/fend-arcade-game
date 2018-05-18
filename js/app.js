@@ -5,7 +5,10 @@ var Enemy = function() {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
+    this.sprite = 'images/enemy-bug.png',
+    this.x = 1,
+    this.y = 0,
+    this.speed = 5;
 };
 
 // Update the enemy's position, required method for game
@@ -46,7 +49,16 @@ const Player = function() {
 
 
 // Now instantiate your objects.
+const enemy01 = Object.create(Enemy);
+const enemy02 = Object.create(Enemy);
+const enemy03 = Object.create(Enemy);
+const enemy04 = Object.create(Enemy);
+const enemy05 = Object.create(Enemy);
+const enemy06 = Object.create(Enemy);
+const enemy07 = Object.create(Enemy);
 // Place all enemy objects in an array called allEnemies
+const allEnemies = [enemy01, enemy02, enemy03, enemy04, enemy05, enemy06, enemy07];
+
 // Place the player object in a variable called player
 const player = Player;
 
