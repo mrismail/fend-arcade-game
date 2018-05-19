@@ -47,7 +47,23 @@ const Player = function (row, col) {
     };
 
     this.handleInput = function (input) {
-        //TODO handle input
+        if (input == 'left') {
+            if (this.col != 0) {
+                this.col -= 1;
+            }
+        } else if (input == 'up') {
+            if (this.row != 0) {
+                this.row -= 1;
+            }
+        } else if (input == 'right') {
+            if (this.col != 4) {
+                this.col += 1;
+            }
+        } else if (input == 'down') {
+            if (this.row != 5) {
+                this.row += 1;
+            }
+        }
     };
 
     this.handleCollision = function () {
