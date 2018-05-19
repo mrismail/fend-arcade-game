@@ -14,10 +14,13 @@ var Enemy = function (row, col, speed) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function (dt) {
+    let factor = (this.speed * dt) % 5;
 
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    if(this.col + factor > 5) {
+        this.col = this.col + factor - 6;
+    } else {
+        this.col = this.col + factor;
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -52,13 +55,13 @@ const Player = function (row, col) {
     };
 };
 
-const enemy01 = new Enemy(1, 0, 5);
-const enemy02 = new Enemy(1, 2, 6);
+const enemy01 = new Enemy(1, 0, 2);
+const enemy02 = new Enemy(1, 2, 2);
 const enemy03 = new Enemy(1, 4, 3);
-const enemy04 = new Enemy(2, 1, 4);
-const enemy05 = new Enemy(2, 3, 5);
-const enemy06 = new Enemy(3, 2, 6);
-const enemy07 = new Enemy(3, 0, 7);
+const enemy04 = new Enemy(2, 1, 3);
+const enemy05 = new Enemy(2, 3, 1);
+const enemy06 = new Enemy(3, 2, 2);
+const enemy07 = new Enemy(3, 0, 3);
 const allEnemies = [enemy01, enemy02, enemy03, enemy04, enemy05, enemy06, enemy07];
 
 const player = new Player(5, 2);
