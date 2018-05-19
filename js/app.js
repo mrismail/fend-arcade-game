@@ -1,14 +1,14 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(row, col, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png',
-    this.x = 1,
-    this.y = 0,
-    this.speed = 5;
+    this.sprite = 'images/enemy-bug.png';
+    this.row = row;
+    this.col = col;
+    this.speed = speed;
 };
 
 // Update the enemy's position, required method for game
@@ -21,46 +21,51 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        ctx.drawImage(Resources.get(this.sprite), this.col, this.row);
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-const Player = function() {
-    this.sprite = 'images/char-boy.png',
-    this.x = 5,
-    this.y = 2,
-    this.score = 0,
-    this.lifes = 3,
+const Player = function(row, col) {
+    this.sprite = 'images/char-boy.png';
+    this.row = row;
+    this.col = col;
+    this.score = 0;
+    this.lifes = 3;
+
     this.update = function() {
         //TODO update player properties
-    },
+    };
+
     this.render = function() {
         //TODO render player
-    },
-    this.handleInput = function() {
+    };
+
+    this.handleInput = function(input) {
         //TODO handle input
-    },
+    };
+
     this.handleCollision = function() {
         //TODO handle collision
     };
 };
 
-
 // Now instantiate your objects.
-const enemy01 = Object.create(Enemy);
-const enemy02 = Object.create(Enemy);
-const enemy03 = Object.create(Enemy);
-const enemy04 = Object.create(Enemy);
-const enemy05 = Object.create(Enemy);
-const enemy06 = Object.create(Enemy);
-const enemy07 = Object.create(Enemy);
+const enemy01 = new Enemy(1, 0, 5);
+const enemy02 = new Enemy(1, 2, 6);
+const enemy03 = new Enemy(1, 4, 3);
+const enemy04 = new Enemy(2, 1, 4);
+const enemy05 = new Enemy(2, 3, 5);
+const enemy06 = new Enemy(3, 2, 6);
+const enemy07 = new Enemy(3, 0, 7);
 // Place all enemy objects in an array called allEnemies
 const allEnemies = [enemy01, enemy02, enemy03, enemy04, enemy05, enemy06, enemy07];
 
+
+
 // Place the player object in a variable called player
-const player = Player;
+const player = new Player(5,2);
 
 
 
