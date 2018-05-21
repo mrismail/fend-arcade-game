@@ -39,7 +39,9 @@ const Player = function (row, col) {
     this.lifes = 3;
 
     this.update = function () {
-        //TODO update player properties
+        if (this.row == 0) {
+            this.startAgian();
+        }
     };
 
     this.render = function () {
@@ -64,6 +66,11 @@ const Player = function (row, col) {
                 this.row += 1;
             }
         }
+    };
+
+    this.startAgian = function() {
+        this.row = 5;
+        this.col = 2;
     };
 
     this.handleCollision = function () {
