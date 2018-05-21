@@ -1,5 +1,5 @@
 // Enemies our player must avoid
-var Enemy = function (row, col, speed) {
+var Enemy = function(row, col, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -13,10 +13,10 @@ var Enemy = function (row, col, speed) {
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function (dt) {
+Enemy.prototype.update = function(dt) {
     let factor = (this.speed * dt) % 5;
 
-    if(this.col + factor > 5) {
+    if (this.col + factor > 5) {
         this.col = this.col + factor - 6;
     } else {
         this.col = this.col + factor;
@@ -24,14 +24,14 @@ Enemy.prototype.update = function (dt) {
 };
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function () {
+Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 75);
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-const Player = function (row, col) {
+const Player = function(row, col) {
     this.sprite = 'images/char-boy.png';
     this.row = row;
     this.col = col;
@@ -40,6 +40,7 @@ const Player = function (row, col) {
 
     this.update = function () {
         if (this.row == 0) {
+            this.handleScore(false);
             this.startAgian();
         }
     };
@@ -48,7 +49,7 @@ const Player = function (row, col) {
         ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 80);
     };
 
-    this.handleInput = function (input) {
+    this.handleInput = function(input) {
         if (input == 'left') {
             if (this.col != 0) {
                 this.col -= 1;
@@ -73,7 +74,15 @@ const Player = function (row, col) {
         this.col = 2;
     };
 
-    this.handleCollision = function () {
+    this.handleScore = function(isCollision) {
+        if (isCollision) {
+            this.score -= 20;
+        } else {
+            this.score += 40;
+        }
+    };
+
+    this.handleCollision = function() {
         //TODO handle collision
     };
 };
@@ -92,7 +101,7 @@ const player = new Player(5, 2);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function (e) {
+document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
