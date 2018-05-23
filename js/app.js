@@ -1,18 +1,21 @@
-// Enemies our player must avoid
+/**
+ * Eneny class
+ * @param {*} row row position
+ * @param {*} col column position
+ * @param {*} speed enemy movement speed
+ */
 var Enemy = function (row, col, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.row = row;
     this.col = col;
     this.speed = speed;
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+
+/**
+ * Update the enemy's position
+ * @param {*} dt a time delta between ticks
+ */
 Enemy.prototype.update = function (dt) {
     let factor = (this.speed * dt) % 5;
 
@@ -25,11 +28,16 @@ Enemy.prototype.update = function (dt) {
     this.checkCollision();
 };
 
-// Draw the enemy on the screen, required method for game
+/**
+ * @description Draw the enemy on the screen
+ */
 Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 75);
 };
 
+/**
+ * @description Handle enemy collision with player
+ */
 Enemy.prototype.checkCollision = function () {
 
     if (Math.round(this.row) == player.row &&
@@ -38,10 +46,11 @@ Enemy.prototype.checkCollision = function () {
         player.startAgian();
     }
 };
-
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+/**
+ * Player class
+ * @param {*} row row position
+ * @param {*} col column position
+ */
 const Player = function (row, col) {
     this.sprite = 'images/char-boy.png';
     this.row = row;
@@ -49,6 +58,9 @@ const Player = function (row, col) {
     this.score = 0;
     this.lifes = 3;
 
+    /**
+     * @description Update player properties
+     */
     this.update = function () {
         if (this.row == 0) {
             this.handleScore(false);
@@ -58,10 +70,17 @@ const Player = function (row, col) {
         }
     };
 
+    /**
+     * @description Render player
+     */
     this.render = function () {
         ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 80);
     };
 
+    /**
+     * @description Handle input key action
+     * @param {*} input key
+     */
     this.handleInput = function (input) {
         if (input == 'left') {
             if (this.col != 0) {
@@ -82,11 +101,18 @@ const Player = function (row, col) {
         }
     };
 
+    /**
+     * @description Reset player to start position
+     */
     this.startAgian = function () {
         this.row = 5;
         this.col = 2;
     };
 
+    /**
+     * @description handle score manipulation
+     * @param {*} isCollision
+     */
     this.handleScore = function (isCollision) {
         if (isCollision) {
             this.score -= 20;
@@ -95,6 +121,9 @@ const Player = function (row, col) {
         }
     };
 
+    /**
+     * @description handle player collision with all enemies
+     */
     this.checkCollision = function () {
         allEnemies.forEach((enemy) => {
             if (this.row == Math.round(enemy.row) &&
@@ -106,6 +135,7 @@ const Player = function (row, col) {
     };
 };
 
+// array of enemies
 const allEnemies = [new Enemy(1, 1, 2),
     new Enemy(1, 4, 2),
     new Enemy(1, 2, 3),
@@ -115,11 +145,12 @@ const allEnemies = [new Enemy(1, 1, 2),
     new Enemy(3, 0, 3)
 ];
 
+// player instance
 const player = new Player(5, 2);
 
 
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// Player.handleInput() method.
 document.addEventListener('keyup', function (e) {
     var allowedKeys = {
         37: 'left',
