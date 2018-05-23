@@ -1,5 +1,5 @@
 // Enemies our player must avoid
-var Enemy = function(row, col, speed) {
+var Enemy = function (row, col, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -13,7 +13,7 @@ var Enemy = function(row, col, speed) {
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
+Enemy.prototype.update = function (dt) {
     let factor = (this.speed * dt) % 5;
 
     if (this.col + factor > 5) {
@@ -21,17 +21,28 @@ Enemy.prototype.update = function(dt) {
     } else {
         this.col = this.col + factor;
     }
+
+    this.checkCollision();
 };
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
+Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 75);
+};
+
+Enemy.prototype.checkCollision = function () {
+
+    if (Math.round(this.row) == player.row &&
+        Math.round(this.col) == player.col) {
+        player.handleScore(true);
+        player.startAgian();
+    }
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-const Player = function(row, col) {
+const Player = function (row, col) {
     this.sprite = 'images/char-boy.png';
     this.row = row;
     this.col = col;
@@ -42,6 +53,8 @@ const Player = function(row, col) {
         if (this.row == 0) {
             this.handleScore(false);
             this.startAgian();
+        } else {
+            this.checkCollision();
         }
     };
 
@@ -49,7 +62,7 @@ const Player = function(row, col) {
         ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 80);
     };
 
-    this.handleInput = function(input) {
+    this.handleInput = function (input) {
         if (input == 'left') {
             if (this.col != 0) {
                 this.col -= 1;
@@ -69,12 +82,12 @@ const Player = function(row, col) {
         }
     };
 
-    this.startAgian = function() {
+    this.startAgian = function () {
         this.row = 5;
         this.col = 2;
     };
 
-    this.handleScore = function(isCollision) {
+    this.handleScore = function (isCollision) {
         if (isCollision) {
             this.score -= 20;
         } else {
@@ -82,26 +95,32 @@ const Player = function(row, col) {
         }
     };
 
-    this.handleCollision = function() {
-        //TODO handle collision
+    this.checkCollision = function () {
+        allEnemies.forEach((enemy) => {
+            if (this.row == Math.round(enemy.row) &&
+                this.col == Math.round(enemy.col)) {
+                this.startAgian();
+                this.handleScore(true);
+            }
+        });
     };
 };
 
-const enemy01 = new Enemy(1, 0, 2);
-const enemy02 = new Enemy(1, 2, 2);
-const enemy03 = new Enemy(1, 4, 3);
-const enemy04 = new Enemy(2, 1, 3);
-const enemy05 = new Enemy(2, 3, 1);
-const enemy06 = new Enemy(3, 2, 2);
-const enemy07 = new Enemy(3, 0, 3);
-const allEnemies = [enemy01, enemy02, enemy03, enemy04, enemy05, enemy06, enemy07];
+const allEnemies = [new Enemy(1, 1, 2),
+    new Enemy(1, 4, 2),
+    new Enemy(1, 2, 3),
+    new Enemy(2, 1, 4),
+    new Enemy(2, 3, 1),
+    new Enemy(3, 2, 2),
+    new Enemy(3, 0, 3)
+];
 
 const player = new Player(5, 2);
 
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
+document.addEventListener('keyup', function (e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
