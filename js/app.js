@@ -64,7 +64,9 @@ const Player = function (row, col) {
     this.update = function () {
         if (this.row == 0) {
             this.handleScore(false);
-            this.startAgian();
+            congrats.classList.remove("hide");
+
+            // this.startAgian();
         } else {
             this.checkCollision();
         }
@@ -97,6 +99,10 @@ const Player = function (row, col) {
         } else if (input == 'down') {
             if (this.row != 5) {
                 this.row += 1;
+            }
+        } else if (input == 'reset') {
+            if (this.row == 0) {
+                this.reset();
             }
         }
     };
@@ -133,6 +139,15 @@ const Player = function (row, col) {
             }
         });
     };
+
+    /**
+     * @description Reset all game stats
+     */
+    this.reset = function () {
+        congrats.classList.add("hide");
+        this.startAgian();
+        this.handleScore(true);
+    };
 };
 
 // array of enemies
@@ -148,6 +163,8 @@ const allEnemies = [new Enemy(1, 1, 2),
 // player instance
 const player = new Player(5, 2);
 
+const congrats = document.querySelector(".win-panel");
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method.
@@ -156,7 +173,8 @@ document.addEventListener('keyup', function (e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        32: 'reset'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
