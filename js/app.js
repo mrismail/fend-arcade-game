@@ -24,8 +24,6 @@ Enemy.prototype.update = function (dt) {
     } else {
         this.col = this.col + factor;
     }
-
-    this.checkCollision();
 };
 
 /**
@@ -35,17 +33,6 @@ Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 75);
 };
 
-/**
- * @description Handle enemy collision with player
- */
-Enemy.prototype.checkCollision = function () {
-
-    if (Math.round(this.row) == player.row &&
-        Math.round(this.col) == player.col) {
-        player.handleScore(true);
-        player.startAgian();
-    }
-};
 /**
  * Player class
  * @param {*} row row position
@@ -57,98 +44,83 @@ const Player = function (row, col) {
     this.col = col;
     this.score = 0;
     this.lifes = 3;
-
-    /**
-     * @description Update player properties
-     */
-    this.update = function () {
-        if (this.row == 0) {
-            this.handleScore(false);
-            congrats.classList.remove("hide");
-
-            // this.startAgian();
-        } else {
-            this.checkCollision();
-        }
-    };
-
-    /**
-     * @description Render player
-     */
-    this.render = function () {
-        ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 80);
-    };
-
-    /**
-     * @description Handle input key action
-     * @param {*} input key
-     */
-    this.handleInput = function (input) {
-        if (input == 'left') {
-            if (this.col != 0) {
-                this.col -= 1;
-            }
-        } else if (input == 'up') {
-            if (this.row != 0) {
-                this.row -= 1;
-            }
-        } else if (input == 'right') {
-            if (this.col != 4) {
-                this.col += 1;
-            }
-        } else if (input == 'down') {
-            if (this.row != 5) {
-                this.row += 1;
-            }
-        } else if (input == 'reset') {
-            if (this.row == 0) {
-                this.reset();
-            }
-        }
-    };
-
-    /**
-     * @description Reset player to start position
-     */
-    this.startAgian = function () {
-        this.row = 5;
-        this.col = 2;
-    };
-
-    /**
-     * @description handle score manipulation
-     * @param {*} isCollision
-     */
-    this.handleScore = function (isCollision) {
-        if (isCollision) {
-            this.score -= 20;
-        } else {
-            this.score += 40;
-        }
-    };
-
-    /**
-     * @description handle player collision with all enemies
-     */
-    this.checkCollision = function () {
-        allEnemies.forEach((enemy) => {
-            if (this.row == Math.round(enemy.row) &&
-                this.col == Math.round(enemy.col)) {
-                this.startAgian();
-                this.handleScore(true);
-            }
-        });
-    };
-
-    /**
-     * @description Reset all game stats
-     */
-    this.reset = function () {
-        congrats.classList.add("hide");
-        this.startAgian();
-        this.handleScore(true);
-    };
 };
+
+/**
+ * @description Update player properties
+ */
+Player.prototype.update = function () {
+    if (this.row == 0) {
+        this.handleScore(false);
+        congrats.classList.remove("hide");
+    }
+};
+
+/**
+ * @description Render player
+ */
+Player.prototype.render = function () {
+    ctx.drawImage(Resources.get(this.sprite), this.col * 101, this.row * 80);
+};
+
+/**
+ * @description Handle input key action
+ * @param {*} input key
+ */
+Player.prototype.handleInput = function (input) {
+    if (input == 'left') {
+        if (this.col != 0 && this.row != 0) {
+            this.col -= 1;
+        }
+    } else if (input == 'up') {
+        if (this.row != 0) {
+            this.row -= 1;
+        }
+    } else if (input == 'right' && this.row != 0) {
+        if (this.col != 4) {
+            this.col += 1;
+        }
+    } else if (input == 'down' && this.row != 0) {
+        if (this.row != 5) {
+            this.row += 1;
+        }
+    } else if (input == 'reset') {
+        if (this.row == 0) {
+            this.reset();
+        }
+    }
+};
+
+/**
+ * @description Reset player to start position
+ */
+Player.prototype.startAgain = function () {
+    this.row = 5;
+    this.col = 2;
+};
+
+/**
+ * @description handle score manipulation
+ * @param {*} isCollision
+ */
+Player.prototype.handleScore = function (isCollision) {
+    if (isCollision) {
+        this.score -= 20;
+    } else {
+        this.score += 40;
+    }
+};
+
+/**
+ * @description Reset all game stats
+ */
+Player.prototype.reset = function () {
+    congrats.classList.add("hide");
+    this.startAgain();
+    this.score = 0;
+    this.lifes = 3;
+};
+
 
 // array of enemies
 const allEnemies = [new Enemy(1, 1, 2),
@@ -165,6 +137,19 @@ const player = new Player(5, 2);
 
 const congrats = document.querySelector(".win-panel");
 
+/**
+ * @description handle player collision with all enemies
+ */
+function checkCollisions() {
+    for (let i = 0; i < allEnemies.length; i++) {
+        if (player.row == Math.round(allEnemies[i].row) &&
+            player.col == Math.round(allEnemies[i].col)) {
+            player.handleScore(true);
+            player.startAgain();
+            break;
+        }
+    }
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method.
