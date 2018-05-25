@@ -4,7 +4,7 @@
  * @param {*} col column position
  * @param {*} speed enemy movement speed
  */
-var Enemy = function (row, col, speed) {
+const Enemy = function (row, col, speed) {
     this.sprite = 'images/enemy-bug.png';
     this.row = row;
     this.col = col;
